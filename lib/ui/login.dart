@@ -1,5 +1,6 @@
 import 'package:cinnamon/networking/cinnema_api.dart';
 import 'package:cinnamon/shared/constants.dart';
+import 'package:cinnamon/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,6 +58,8 @@ class _LoginPageState extends State<LoginPage> {
       preferences.setString(Constants.EMAIL_PREFERENCE, user.email);
       preferences.setInt(Constants.ID_PREFERENCE, user.id);
       preferences.setString(Constants.TOKEN_PREFERENCE, user.token);
+      Navigator.pushReplacement(this.context,
+          MaterialPageRoute(builder: (BuildContext ctx) => HomePage()));
     }).catchError((error) {
       Fluttertoast.showToast(
           msg: "Login error",
