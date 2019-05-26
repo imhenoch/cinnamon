@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:cinnamon/networking/cinnema_api.dart';
+import 'package:cinnamon/shared/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -25,9 +28,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextField(
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                  labelText: "Email"
-              ),
+              decoration: InputDecoration(labelText: "Email"),
               onChanged: (String email) {
                 this._email = email;
               },
@@ -35,9 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             TextField(
               obscureText: true,
               keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                  labelText: "Password"
-              ),
+              decoration: InputDecoration(labelText: "Password"),
               onChanged: (String pass) {
                 this._password = pass;
               },
@@ -53,10 +52,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() {
-    CinnemaApi.login(_email, _password).then((user) {
-      print(user);
+    CinnemaApi.login(_email, _password).then((user) async {
+      var preferences = await SharedPreferences.getInstance();
+      preferences.setString(Constants.EMAIL_PREFERENCE, user.email);
+      preferences.setInt(Constants.ID_PREFERENCE, user.id);
+      preferences.setString(Constants.TOKEN_PREFERENCE, user.token);
     }).catchError((error) {
-      print(error);
+      Fluttertoast.showToast(
+          msg: "Login error",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     });
   }
 }
