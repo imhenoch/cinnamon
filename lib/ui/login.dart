@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cinnamon/networking/cinnema_api.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -6,6 +7,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String _email;
+  String _password;
+
   @override
   void initState() {
     super.initState();
@@ -20,15 +24,23 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                   labelText: "Email"
               ),
+              onChanged: (String email) {
+                this._email = email;
+              },
             ),
             TextField(
               obscureText: true,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                   labelText: "Password"
               ),
+              onChanged: (String pass) {
+                this._password = pass;
+              },
             ),
             RaisedButton(
               child: Text("Login"),
@@ -41,6 +53,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() {
-
+    CinnemaApi.login(_email, _password).then((user) {
+      print(user);
+    }).catchError((error) {
+      print(error);
+    });
   }
 }
