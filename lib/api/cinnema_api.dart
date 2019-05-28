@@ -38,8 +38,8 @@ class CinnemaApi {
     if (response.statusCode == 200) {
       var genres = genresFromJson(response.body);
       var favoriteGenres = [];
-      _getFavoriteGenres()
-          .then((genres) => favoriteGenres = genres)
+      await _getFavoriteGenres()
+          .then((genres) => favoriteGenres.addAll(genres))
           .catchError((error) {});
       List<LocalGenre> localGenres = [];
       genres.forEach((genre) {
@@ -64,7 +64,7 @@ class CinnemaApi {
 
   static void saveFavoriteGenre(Genre genre) async {
     var preferences = await SharedPreferences.getInstance();
-    var favoriteGenres = [];
+    List<String> favoriteGenres = [];
     if (preferences.containsKey(Constants.FAVORITE_GENRES_PREFERENCE)) {
       favoriteGenres =
           preferences.getStringList(Constants.FAVORITE_GENRES_PREFERENCE);
@@ -76,7 +76,7 @@ class CinnemaApi {
 
   static void removeFavoriteGenre(Genre genre) async {
     var preferences = await SharedPreferences.getInstance();
-    var favoriteGenres =
+    List<String> favoriteGenres =
         preferences.getStringList(Constants.FAVORITE_GENRES_PREFERENCE);
     favoriteGenres.remove(genre.genre);
     preferences.setStringList(
