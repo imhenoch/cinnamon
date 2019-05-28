@@ -12,13 +12,13 @@ Future<void> main() async {
 
   runApp(MaterialApp(
     title: "Cinnamon",
-    home: initialScreen(isUserLogged),
+    home: await initialScreen(isUserLogged),
   ));
 }
 
-Widget initialScreen(bool isUserLogged) {
+Future<Widget> initialScreen(bool isUserLogged) async {
   if (isUserLogged) {
-    CinnemaApi.loadToken();
+    await CinnemaApi.loadToken();
     return HomePage();
   } else {
     return LoginPage();
