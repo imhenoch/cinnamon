@@ -13,3 +13,10 @@ class Genre {
     return Genre(id: json["id"], genre: json["genre"]);
   }
 }
+
+class LocalGenre {
+  Genre rawGenre;
+  bool isFavorite;
+
+  LocalGenre({this.rawGenre, this.isFavorite});
+}
