@@ -1,4 +1,4 @@
-import 'package:cinnamon/networking/cinnema_api.dart';
+import 'package:cinnamon/api/cinnema_api.dart';
 import 'package:cinnamon/shared/ui.dart';
 import 'package:cinnamon/ui/home.dart';
 import 'package:flutter/material.dart';
