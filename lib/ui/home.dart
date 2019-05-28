@@ -1,7 +1,8 @@
 import 'package:cinnamon/api/cinnema_api.dart';
 import 'package:cinnamon/models/user.dart';
-import 'package:cinnamon/ui/genres.dart';
+import 'package:cinnamon/shared/ui.dart';
 import 'package:cinnamon/ui/films.dart';
+import 'package:cinnamon/ui/genres.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -50,6 +51,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    CinnemaApi.isFirstTime().then((isFirstTime) {
+      if (isFirstTime) {
+        _selectedDrawerIndex = 1;
+        UIUtils.notifyInfo("Choose your favorite genres");
+      }
+    });
     CinnemaApi.getUser().then((user) => _user = user);
   }
 

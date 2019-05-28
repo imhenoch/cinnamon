@@ -54,6 +54,6 @@ class _LoginPageState extends State<LoginPage> {
     CinnemaApi.login(_email, _password)
         .then((user) => Navigator.pushReplacement(this.context,
             MaterialPageRoute(builder: (BuildContext ctx) => HomePage())))
-        .catchError((error) => UIUtils.error(error));
+        .catchError((error) => UIUtils.notifyError("Login error"));
   }
 }

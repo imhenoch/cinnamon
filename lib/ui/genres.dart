@@ -17,7 +17,7 @@ class _GenresState extends State<Genres> {
     super.initState();
     CinnemaApi.getGenres()
         .then((genres) => setState(() => _genres = genres))
-        .catchError((error) => UIUtils.error(error));
+        .catchError((error) => UIUtils.notifyError(error));
   }
 
   @override
