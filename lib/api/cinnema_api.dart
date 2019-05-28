@@ -32,14 +32,55 @@ class CinnemaApi {
     }
   }
 
-  static Future<List<Genre>> getGenres() async {
+  static Future<List<LocalGenre>> getGenres() async {
     final response = await http.get('$baseUrl/genre', headers: _headers);
 
     if (response.statusCode == 200) {
-      return genresFromJson(response.body);
+      var genres = genresFromJson(response.body);
+      var favoriteGenres = [];
+      _getFavoriteGenres()
+          .then((genres) => favoriteGenres = genres)
+          .catchError((error) {});
+      List<LocalGenre> localGenres = [];
+      genres.forEach((genre) {
+        localGenres.add(LocalGenre(
+            rawGenre: genre, isFavorite: favoriteGenres.contains(genre.genre)));
+      });
+      return localGenres;
     } else {
       throw Exception('Failed to get genres');
     }
+  }
+
+  static Future<List<String>> _getFavoriteGenres() async {
+    var preferences = await SharedPreferences.getInstance();
+    var favoriteGenres = [];
+    if (preferences.containsKey(Constants.FAVORITE_GENRES_PREFERENCE)) {
+      favoriteGenres =
+          preferences.getStringList(Constants.FAVORITE_GENRES_PREFERENCE);
+    }
+    return favoriteGenres;
+  }
+
+  static void saveFavoriteGenre(Genre genre) async {
+    var preferences = await SharedPreferences.getInstance();
+    var favoriteGenres = [];
+    if (preferences.containsKey(Constants.FAVORITE_GENRES_PREFERENCE)) {
+      favoriteGenres =
+          preferences.getStringList(Constants.FAVORITE_GENRES_PREFERENCE);
+    }
+    favoriteGenres.add(genre.genre);
+    preferences.setStringList(
+        Constants.FAVORITE_GENRES_PREFERENCE, favoriteGenres);
+  }
+
+  static void removeFavoriteGenre(Genre genre) async {
+    var preferences = await SharedPreferences.getInstance();
+    var favoriteGenres =
+        preferences.getStringList(Constants.FAVORITE_GENRES_PREFERENCE);
+    favoriteGenres.remove(genre.genre);
+    preferences.setStringList(
+        Constants.FAVORITE_GENRES_PREFERENCE, favoriteGenres);
   }
 
   static void loadToken() async {
