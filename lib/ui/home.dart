@@ -1,10 +1,12 @@
 import 'package:cinnamon/api/cinnema_api.dart';
 import 'package:cinnamon/models/user.dart';
+import 'package:cinnamon/ui/categories.dart';
+import 'package:cinnamon/ui/films.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   final drawerItems = [
-    DrawerItem("Movies", Icons.movie),
+    DrawerItem("Films", Icons.movie),
     DrawerItem("Categories", Icons.category)
   ];
 
@@ -34,6 +36,17 @@ class _HomePageState extends State<HomePage> {
     return drawerOptions;
   }
 
+  Widget _body() {
+    switch (_selectedDrawerIndex) {
+      case 0:
+        return Films();
+      case 1:
+        return Categories();
+      default:
+        return Text("Error");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +72,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      body: _body(),
     );
   }
 }
