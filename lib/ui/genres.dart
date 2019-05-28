@@ -1,8 +1,8 @@
 import 'package:cinnamon/api/cinnema_api.dart';
 import 'package:cinnamon/models/genre.dart';
 import 'package:cinnamon/shared/ui.dart';
-import 'package:flutter/material.dart';
 import 'package:cinnamon/ui/genre_tile.dart';
+import 'package:flutter/material.dart';
 
 class Genres extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class Genres extends StatefulWidget {
 }
 
 class _GenresState extends State<Genres> {
-  List<Genre> _genres = [];
+  List<LocalGenre> _genres = [];
 
   @override
   void initState() {

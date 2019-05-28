@@ -2,9 +2,9 @@ import 'package:cinnamon/models/genre.dart';
 import 'package:flutter/material.dart';
 
 class GenreTile extends StatefulWidget {
-  final Genre genre;
+  final LocalGenre localGenre;
 
-  GenreTile(this.genre);
+  GenreTile(this.localGenre);
 
   @override
   _GenreTileState createState() => _GenreTileState();
@@ -18,6 +18,9 @@ class _GenreTileState extends State<GenreTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(widget.genre.genre);
+    return Text(
+        "${widget.localGenre.rawGenre.genre} ${widget.localGenre.isFavorite
+            ? "true"
+            : "false"}");
   }
 }
