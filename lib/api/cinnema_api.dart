@@ -96,4 +96,12 @@ class CinnemaApi {
         email: preferences.getString(Constants.EMAIL_PREFERENCE),
         token: "");
   }
+  
+  static Future<bool> isFirstTime() async {
+    var preferences = await SharedPreferences.getInstance();
+    var isFirstTime = preferences.containsKey(Constants.FIRST_TIME_PREFERENCE);
+    if(!isFirstTime)
+      preferences.setBool(Constants.FIRST_TIME_PREFERENCE, true);
+    return !isFirstTime;
+  }
 }
