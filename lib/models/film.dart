@@ -4,7 +4,7 @@ import 'package:cinnamon/models/genre.dart';
 import 'package:cinnamon/models/language.dart';
 import 'package:cinnamon/models/rating.dart';
 
-List<Film> filmFromJson(String str) =>
+List<Film> filmsFromJson(String str) =>
     new List<Film>.from(json.decode(str).map((x) => Film.fromJson(x)));
 
 class Film {

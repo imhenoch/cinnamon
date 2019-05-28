@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cinnamon/models/film.dart';
 import 'package:cinnamon/models/genre.dart';
 import 'package:cinnamon/models/user.dart';
 import 'package:cinnamon/shared/constants.dart';
@@ -7,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CinnemaApi {
-  static final baseUrl = "http://192.168.1.66:8080";
+  static final _baseUrl = "http://192.168.1.66:8080";
   static var _headers = {
     "Accept": "application/json",
     "content-type": "application/json",
@@ -16,7 +17,7 @@ class CinnemaApi {
   static Future<User> login(String email, String password) async {
     var body = jsonEncode({'email': email, 'password': password});
     final response =
-        await http.post('$baseUrl/login', body: body, headers: _headers);
+        await http.post('$_baseUrl/login', body: body, headers: _headers);
 
     if (response.statusCode == 200) {
       var user = User.fromJson(json.decode(response.body));
@@ -33,7 +34,7 @@ class CinnemaApi {
   }
 
   static Future<List<LocalGenre>> getGenres() async {
-    final response = await http.get('$baseUrl/genre', headers: _headers);
+    final response = await http.get('$_baseUrl/genre', headers: _headers);
 
     if (response.statusCode == 200) {
       var genres = genresFromJson(response.body);
@@ -49,6 +50,16 @@ class CinnemaApi {
       return localGenres;
     } else {
       throw Exception('Failed to get genres');
+    }
+  }
+
+  static Future<List<Film>> getFilms() async {
+    final response = await http.get('$_baseUrl/film', headers: _headers);
+
+    if (response.statusCode == 200) {
+      return filmsFromJson(response.body);
+    } else {
+      throw Exception('Failed to get films');
     }
   }
 
@@ -83,7 +94,7 @@ class CinnemaApi {
         Constants.FAVORITE_GENRES_PREFERENCE, favoriteGenres);
   }
 
-  static void loadToken() async {
+  static Future<void> loadToken() async {
     var preferences = await SharedPreferences.getInstance();
     _headers["Authorization"] =
         "Bearer ${preferences.getString(Constants.TOKEN_PREFERENCE)}";
@@ -96,11 +107,11 @@ class CinnemaApi {
         email: preferences.getString(Constants.EMAIL_PREFERENCE),
         token: "");
   }
-  
+
   static Future<bool> isFirstTime() async {
     var preferences = await SharedPreferences.getInstance();
     var isFirstTime = preferences.containsKey(Constants.FIRST_TIME_PREFERENCE);
-    if(!isFirstTime)
+    if (!isFirstTime)
       preferences.setBool(Constants.FIRST_TIME_PREFERENCE, true);
     return !isFirstTime;
   }
