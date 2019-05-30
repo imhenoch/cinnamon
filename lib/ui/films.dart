@@ -1,4 +1,7 @@
 import 'package:cinnamon/api/cinnema_api.dart';
+import 'package:cinnamon/models/film.dart';
+import 'package:cinnamon/shared/ui.dart';
+import 'package:cinnamon/ui/film_file.dart';
 import 'package:flutter/material.dart';
 
 class Films extends StatefulWidget {
@@ -7,9 +10,26 @@ class Films extends StatefulWidget {
 }
 
 class _FilmsState extends State<Films> {
+  List<Film> _films = [];
+
+  @override
+  void initState() {
+    super.initState();
+    CinnemaApi.getFilms()
+        .then((films) => setState(() => _films = films))
+        .catchError((error) => UIUtils.notifyError(error));
+  }
+
   @override
   Widget build(BuildContext context) {
-    CinnemaApi.getFilms().then((films) => print(films));
-    return Text("FILMS");
+    return Scrollbar(
+      child: ListView.builder(
+          padding: const EdgeInsets.only(bottom: 50.0),
+          itemCount: _films.length,
+          itemBuilder: (BuildContext context, int index) {
+            final film = _films[index];
+            return FilmTile(film);
+          }),
+    );
   }
 }
