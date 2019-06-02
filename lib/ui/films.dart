@@ -29,7 +29,7 @@ class _FilmsState extends State<Films> {
           itemBuilder: (BuildContext context, int index) {
             final film = _films[index];
             return FilmTile(film);
-          }),
+          })
     );
   }
 }
