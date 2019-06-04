@@ -17,7 +17,7 @@ class _FilmsState extends State<Films> {
     super.initState();
     CinnemaApi.getFilms()
         .then((films) => setState(() => _films = films))
-        .catchError((error) => UIUtils.notifyError(error));
+        .catchError((error) => UIUtils.notifyError('Error getting genres'));
   }
 
   @override

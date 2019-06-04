@@ -8,7 +8,7 @@ import 'api/cinnema_api.dart';
 
 Future<void> main() async {
   var preferences = await SharedPreferences.getInstance();
-  var isUserLogged = preferences.containsKey(Constants.ID_PREFERENCE);
+  var isUserLogged = preferences.containsKey(Constants.TOKEN_PREFERENCE);
 
   runApp(MaterialApp(
     title: "Cinnamon",

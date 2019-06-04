@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String _email;
   String _password;
+  bool _saveLogin = true;
 
   @override
   void initState() {
@@ -25,24 +26,36 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(labelText: "Email"),
-              onChanged: (String email) {
-                this._email = email;
-              },
-            ),
-            TextField(
-              obscureText: true,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(labelText: "Password"),
-              onChanged: (String pass) {
-                this._password = pass;
-              },
-            ),
-            RaisedButton(
-              child: Text("Login"),
-              onPressed: _login,
+            Wrap(
+              alignment: WrapAlignment.center,
+              runSpacing: 16.0,
+              children: [
+                TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(labelText: "Email"),
+                  onChanged: (String email) => this._email = email
+                ),
+                TextField(
+                  obscureText: true,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(labelText: "Password"),
+                  onChanged: (String pass) => this._password = pass
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Checkbox(
+                        value: this._saveLogin,
+                        onChanged: (bool saveLogin) => setState(() => this._saveLogin = saveLogin)
+                    ),
+                    Text("Save login")
+                  ]
+                ),
+                RaisedButton(
+                  child: Text("Login"),
+                  onPressed: _login,
+                )
+              ],
             )
           ],
         ),
@@ -51,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() {
-    CinnemaApi.login(_email, _password)
+    CinnemaApi.login(_email, _password, _saveLogin)
         .then((user) => Navigator.pushReplacement(this.context,
             MaterialPageRoute(builder: (BuildContext ctx) => HomePage())))
         .catchError((error) => UIUtils.notifyError("Login error"));

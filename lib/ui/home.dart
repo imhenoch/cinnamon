@@ -3,6 +3,7 @@ import 'package:cinnamon/models/user.dart';
 import 'package:cinnamon/shared/ui.dart';
 import 'package:cinnamon/ui/films.dart';
 import 'package:cinnamon/ui/genres.dart';
+import 'package:cinnamon/ui/login.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,6 +25,11 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
   }
 
+  _logout() {
+    CinnemaApi.removeLogin().then((_) => Navigator.pushReplacement(this.context,
+        MaterialPageRoute(builder: (BuildContext ctx) => LoginPage())));
+  }
+
   List<Widget> _drawerOptions() {
     var drawerOptions = <Widget>[];
     widget.drawerItems.asMap().forEach((index, item) {
@@ -34,6 +40,7 @@ class _HomePageState extends State<HomePage> {
         onTap: () => _onSelectItem(index),
       ));
     });
+    drawerOptions.add(FlatButton(onPressed: _logout, child: Text("Log out")));
     return drawerOptions;
   }
 

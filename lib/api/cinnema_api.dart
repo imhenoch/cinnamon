@@ -8,29 +8,43 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CinnemaApi {
-  static final _baseUrl = "http://192.168.1.66:8080";
+  static final _baseUrl = "http://192.168.1.67:8080";
   static var _headers = {
     "Accept": "application/json",
     "content-type": "application/json",
   };
 
-  static Future<User> login(String email, String password) async {
+  static Future<User> login(
+      String email, String password, bool saveLogin) async {
     var body = jsonEncode({'email': email, 'password': password});
     final response =
         await http.post('$_baseUrl/login', body: body, headers: _headers);
 
     if (response.statusCode == 200) {
       var user = User.fromJson(json.decode(response.body));
-      var preferences = await SharedPreferences.getInstance();
-      preferences.setString(Constants.EMAIL_PREFERENCE, user.email);
-      preferences.setInt(Constants.ID_PREFERENCE, user.id);
-      preferences.setString(Constants.TOKEN_PREFERENCE, user.token);
+      await _saveLogin(user, saveLogin);
       _headers["Authorization"] = "Bearer ${user.token}";
 
       return user;
     } else {
       throw Exception('Failed to login');
     }
+  }
+
+  static Future _saveLogin(User user, bool saveLogin) async {
+    var preferences = await SharedPreferences.getInstance();
+    preferences.setString(Constants.EMAIL_PREFERENCE, user.email);
+    preferences.setInt(Constants.ID_PREFERENCE, user.id);
+    if (saveLogin) {
+      preferences.setString(Constants.TOKEN_PREFERENCE, user.token);
+    }
+  }
+
+  static Future removeLogin() async {
+    var preferences = await SharedPreferences.getInstance();
+    preferences.remove(Constants.EMAIL_PREFERENCE);
+    preferences.remove(Constants.TOKEN_PREFERENCE);
+    preferences.remove(Constants.ID_PREFERENCE);
   }
 
   static Future<List<LocalGenre>> getGenres() async {
