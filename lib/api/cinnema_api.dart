@@ -120,6 +120,19 @@ class CinnemaApi {
         Constants.FAVORITE_GENRES_PREFERENCE, favoriteGenres);
   }
 
+  static Future<bool> saveTicket(int function, int row, int column) async {
+    var ticket = "$function,$row,$column";
+    var preferences = await SharedPreferences.getInstance();
+    List<String> tickets = [];
+    if (preferences.containsKey(Constants.TICKETS_PREFERENCE)) {
+      tickets = preferences.getStringList(Constants.TICKETS_PREFERENCE);
+    }
+    if (tickets.contains(ticket)) return false;
+    tickets.add(ticket);
+    preferences.setStringList(Constants.TICKETS_PREFERENCE, tickets);
+    return true;
+  }
+
   static Future<void> loadToken() async {
     var preferences = await SharedPreferences.getInstance();
     _headers["Authorization"] =
