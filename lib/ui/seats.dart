@@ -1,4 +1,6 @@
+import 'package:cinnamon/api/cinnema_api.dart';
 import 'package:cinnamon/models/function.dart';
+import 'package:cinnamon/shared/ui.dart';
 import 'package:flutter/material.dart';
 
 class SeatsPage extends StatelessWidget {
@@ -7,7 +9,12 @@ class SeatsPage extends StatelessWidget {
   SeatsPage(this.function);
 
   _seatSelection(int row, int column) {
-    print('$row - $column');
+    CinnemaApi.saveTicket(function.id, row, column).then((result) {
+      if (result)
+        UIUtils.notifyInfo("Ticket bought");
+      else
+        UIUtils.notifyError("That seat is ocupied");
+    }).catchError((error) => UIUtils.notifyError("Error buying the ticket"));
   }
 
   List<Widget> _availableSeats() {
@@ -34,7 +41,7 @@ class SeatsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Seats")),
       body: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(8.0),
         child: Column(children: [
           Card(
             child: Row(
@@ -42,9 +49,8 @@ class SeatsPage extends StatelessWidget {
                 Expanded(
                   child: Container(
                     padding:
-                        EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                     child: Wrap(
-                        spacing: 8,
                         direction: Axis.vertical,
                         crossAxisAlignment: WrapCrossAlignment.center,
                         runAlignment: WrapAlignment.center,
