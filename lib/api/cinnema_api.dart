@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:cinnamon/models/film.dart';
 import 'package:cinnamon/models/function.dart';
 import 'package:cinnamon/models/genre.dart';
+import 'package:cinnamon/models/ticket.dart';
 import 'package:cinnamon/models/user.dart';
 import 'package:cinnamon/shared/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CinnemaApi {
-  static final _baseUrl = "http://192.168.1.74:8080";
+  static final _baseUrl = "http://10.100.4.191:8080";
   static var _headers = {
     "Accept": "application/json",
     "content-type": "application/json",
@@ -78,6 +79,16 @@ class CinnemaApi {
     }
   }
 
+  static Future<List<TheFunction>> getAllFunctions() async {
+    final response = await http.get('$_baseUrl/function', headers: _headers);
+
+    if (response.statusCode == 200) {
+      return functionsFromJson(response.body);
+    } else {
+      throw Exception('Failed to get functions');
+    }
+  }
+
   static Future<List<TheFunction>> getFunctions(Film film) async {
     final response =
         await http.get('$_baseUrl/function/${film.id}', headers: _headers);
@@ -120,8 +131,9 @@ class CinnemaApi {
         Constants.FAVORITE_GENRES_PREFERENCE, favoriteGenres);
   }
 
-  static Future<bool> saveTicket(int function, int row, int column) async {
-    var ticket = "$function,$row,$column";
+  static Future<bool> saveTicket(
+      String film, int row, int column, String date, String cinema) async {
+    var ticket = "$film,$row,$column,$date,$cinema";
     var preferences = await SharedPreferences.getInstance();
     List<String> tickets = [];
     if (preferences.containsKey(Constants.TICKETS_PREFERENCE)) {
@@ -131,6 +143,20 @@ class CinnemaApi {
     tickets.add(ticket);
     preferences.setStringList(Constants.TICKETS_PREFERENCE, tickets);
     return true;
+  }
+
+  static Future<List<Ticket>> getTickets() async {
+    var preferences = await SharedPreferences.getInstance();
+    List<String> savedTickets = [];
+    if (preferences.containsKey(Constants.TICKETS_PREFERENCE))
+      savedTickets = preferences.getStringList(Constants.TICKETS_PREFERENCE);
+    List<Ticket> tickets = [];
+    savedTickets.forEach((row) {
+      var rowParams = row.split(',');
+      tickets.add(Ticket(rowParams[0], int.parse(rowParams[1]),
+          int.parse(rowParams[2]), rowParams[3], rowParams[4]));
+    });
+    return tickets;
   }
 
   static Future<void> loadToken() async {

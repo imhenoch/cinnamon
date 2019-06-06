@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cinnamon/models/cinema.dart';
+import 'package:cinnamon/models/film.dart';
 
 List<TheFunction> functionsFromJson(String str) => new List<TheFunction>.from(json.decode(str).map((x) => TheFunction.fromJson(x)));
 
@@ -9,11 +10,13 @@ String functionsToJson(List<TheFunction> data) => json.encode(new List<dynamic>.
 class TheFunction {
   int id;
   Cinema cinema;
+  Film film;
   String date;
 
   TheFunction({
     this.id,
     this.cinema,
+    this.film,
     this.date,
   });
 

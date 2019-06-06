@@ -1,15 +1,17 @@
 import 'package:cinnamon/api/cinnema_api.dart';
 import 'package:cinnamon/models/function.dart';
+import 'package:cinnamon/models/film.dart';
 import 'package:cinnamon/shared/ui.dart';
 import 'package:flutter/material.dart';
 
 class SeatsPage extends StatelessWidget {
   final TheFunction function;
+  final Film film;
 
-  SeatsPage(this.function);
+  SeatsPage(this.function, this.film);
 
   _seatSelection(int row, int column) {
-    CinnemaApi.saveTicket(function.id, row, column).then((result) {
+    CinnemaApi.saveTicket(film.name, row, column, function.date, function.cinema.name).then((result) {
       if (result)
         UIUtils.notifyInfo("Ticket bought");
       else

@@ -29,7 +29,7 @@ class _FilmPageState extends State<FilmPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext ctx) => SeatsPage(function)));
+            builder: (BuildContext ctx) => SeatsPage(function, widget._film)));
   }
 
   Widget _rating() {

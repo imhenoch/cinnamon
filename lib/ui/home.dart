@@ -4,12 +4,14 @@ import 'package:cinnamon/shared/ui.dart';
 import 'package:cinnamon/ui/films.dart';
 import 'package:cinnamon/ui/genres.dart';
 import 'package:cinnamon/ui/login.dart';
+import 'package:cinnamon/ui/tickets.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   final drawerItems = [
     DrawerItem("Films", Icons.movie),
-    DrawerItem("Genres", Icons.category)
+    DrawerItem("Genres", Icons.category),
+    DrawerItem("Tickets", Icons.call_to_action)
   ];
 
   @override
@@ -50,6 +52,8 @@ class _HomePageState extends State<HomePage> {
         return Films();
       case 1:
         return Genres();
+      case 2:
+        return Tickets();
       default:
         return Text("Error");
     }
