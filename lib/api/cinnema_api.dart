@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cinnamon/models/film.dart';
+import 'package:cinnamon/models/function.dart';
 import 'package:cinnamon/models/genre.dart';
 import 'package:cinnamon/models/user.dart';
 import 'package:cinnamon/shared/constants.dart';
@@ -8,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CinnemaApi {
-  static final _baseUrl = "http://192.168.1.67:8080";
+  static final _baseUrl = "http://192.168.1.74:8080";
   static var _headers = {
     "Accept": "application/json",
     "content-type": "application/json",
@@ -74,6 +75,17 @@ class CinnemaApi {
       return filmsFromJson(response.body);
     } else {
       throw Exception('Failed to get films');
+    }
+  }
+
+  static Future<List<Function>> getFunctions(Film film) async {
+    final response =
+        await http.get('$_baseUrl/function/${film.id}', headers: _headers);
+
+    if (response.statusCode == 200) {
+      return functionsFromJson(response.body);
+    } else {
+      throw Exception('Failed to get functions');
     }
   }
 
