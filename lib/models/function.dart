@@ -2,22 +2,22 @@ import 'dart:convert';
 
 import 'package:cinnamon/models/cinema.dart';
 
-List<Function> functionsFromJson(String str) => new List<Function>.from(json.decode(str).map((x) => Function.fromJson(x)));
+List<TheFunction> functionsFromJson(String str) => new List<TheFunction>.from(json.decode(str).map((x) => TheFunction.fromJson(x)));
 
-String functionsToJson(List<Function> data) => json.encode(new List<dynamic>.from(data.map((x) => x.toJson())));
+String functionsToJson(List<TheFunction> data) => json.encode(new List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Function {
+class TheFunction {
   int id;
   Cinema cinema;
   String date;
 
-  Function({
+  TheFunction({
     this.id,
     this.cinema,
     this.date,
   });
 
-  factory Function.fromJson(Map<String, dynamic> json) => new Function(
+  factory TheFunction.fromJson(Map<String, dynamic> json) => new TheFunction(
         id: json["id"],
         cinema: Cinema.fromJson(json["cinema"]),
         date: json["date"],

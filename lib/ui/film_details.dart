@@ -1,5 +1,7 @@
 import 'package:cinnamon/api/cinnema_api.dart';
 import 'package:cinnamon/models/film.dart';
+import 'package:cinnamon/models/function.dart';
+import 'package:cinnamon/shared/ui.dart';
 import 'package:flutter/material.dart';
 
 class FilmPage extends StatefulWidget {
@@ -12,10 +14,18 @@ class FilmPage extends StatefulWidget {
 }
 
 class _FilmPageState extends State<FilmPage> {
+  List<TheFunction> _functions = [];
+
   @override
   void initState() {
     super.initState();
-    CinnemaApi.getFunctions(widget._film).then((functions) => print(functions));
+    CinnemaApi.getFunctions(widget._film)
+        .then((functions) => setState(() => this._functions = functions))
+        .catchError((error) => UIUtils.notifyError("Error getting functions"));
+  }
+
+  _functionSelection(TheFunction function) {
+    print(function);
   }
 
   Widget _rating() {
@@ -46,6 +56,23 @@ class _FilmPageState extends State<FilmPage> {
     ]);
   }
 
+  List<Widget> _availableFunctions() {
+    List<Widget> items = [];
+    items.add(Text("Functions",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)));
+    _functions.forEach((function) {
+      items.add(FlatButton(
+          onPressed: () => _functionSelection(function),
+          child: Row(
+            children: [
+              Text('\'${function.cinema.name}\'   ', style: TextStyle(fontSize: 16)),
+              Text(function.date, style: TextStyle(fontSize: 16))
+            ],
+          )));
+    });
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +100,24 @@ class _FilmPageState extends State<FilmPage> {
                           _genres(),
                           _languages()
                         ]),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Card(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                    child: Wrap(
+                        spacing: 8,
+                        direction: Axis.vertical,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runAlignment: WrapAlignment.center,
+                        children: _availableFunctions()),
                   ),
                 )
               ],

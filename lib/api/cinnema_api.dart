@@ -78,7 +78,7 @@ class CinnemaApi {
     }
   }
 
-  static Future<List<Function>> getFunctions(Film film) async {
+  static Future<List<TheFunction>> getFunctions(Film film) async {
     final response =
         await http.get('$_baseUrl/function/${film.id}', headers: _headers);
 
