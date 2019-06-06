@@ -3,6 +3,7 @@ import 'package:cinnamon/models/film.dart';
 import 'package:cinnamon/models/function.dart';
 import 'package:cinnamon/shared/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:cinnamon/ui/seats.dart';
 
 class FilmPage extends StatefulWidget {
   final Film _film;
@@ -25,7 +26,10 @@ class _FilmPageState extends State<FilmPage> {
   }
 
   _functionSelection(TheFunction function) {
-    print(function);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext ctx) => SeatsPage(function)));
   }
 
   Widget _rating() {
