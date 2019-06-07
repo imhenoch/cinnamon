@@ -1,6 +1,7 @@
 import 'package:cinnamon/api/cinnema_api.dart';
-import 'package:flutter/material.dart';
 import 'package:cinnamon/models/ticket.dart';
+import 'package:cinnamon/ui/ticket_detail.dart';
+import 'package:flutter/material.dart';
 
 class Tickets extends StatefulWidget {
   @override
@@ -26,8 +27,7 @@ class _TicketsState extends State<Tickets> {
             itemCount: _tickets.length,
             itemBuilder: (BuildContext context, int index) {
               final ticket = _tickets[index];
-              return Text("${ticket.row} - ${ticket.column} - ${ticket.cinema} - ${ticket.film} - ${ticket.date}");
-            })
-    );
+              return TicketTile(ticket);
+            }));
   }
 }
